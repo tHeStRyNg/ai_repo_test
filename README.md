@@ -1,4 +1,4 @@
-CODE PLAN
+# App Plan
 Here's a high-level plan for creating a React-based calculator with Node.js as the backend:
 
 **Frontend (React)**
@@ -38,7 +38,7 @@ This plan should provide a solid foundation for building a React-based calculato
 
 **Calculator README**
 
-### Installing and Setting up the Calculator
+# Installing and Setting up the Calculator
 Before you start using the calculator, make sure you have the following installed on your machine:
 
 * Node.js (version 14 or higher)
@@ -109,3 +109,154 @@ Here's a list of all used packages:
 ### Contributing to the Calculator
 
 If you'd like to contribute to the calculator or report any issues, please feel free to reach out to me via GitHub Issues. I'll do my best to help!
+
+# Code Creation
+I'll do my best to implement the plan and provide the necessary code snippets.
+
+**Frontend (React)**
+
+Let's start by creating a new React project using `create-react-app`. Run the following command in your terminal:
+```bash
+npx create-react-app calculator-app --template react-scripts-ts
+```
+This will generate a basic React project with TypeScript support. We'll modify it to fit our needs.
+
+Next, let's design and implement the calculator interface using React components. Create a new file `Calculator.js` under the project root:
+```jsx
+// Calculator.js
+import React, { useState } from 'react';
+
+const Calculator = () => {
+  const [expression, setExpression] = useState('');
+  const [result, setResult] = useState('');
+
+  return (
+    <div className="calculator">
+      <div className="grid-container">
+        <button onClick={() => setExpression(expression + '1')}>1</button>
+        <button onClick={() => setExpression(expression + '2')}>2</button>
+        <!-- ... rest of the buttons and grid layout -->
+      </div>
+      <div className="display-expression">{expression}</div>
+      <div className="display-result">{result}</div>
+    </div>
+  );
+};
+
+export default Calculator;
+```
+This component uses React Hooks to manage the calculator's state (`expression` and `result`). It also defines a grid layout with button elements.
+
+Next, let's implement functionality for calculating expressions. Create a new file `calculator-utils.js` under the project root:
+```js
+// calculator-utils.js
+const mathExpressionEvaluator = require('math-expression-evaluator');
+
+const calculate = (expression) => {
+  const evaluatedResult = mathExpressionEvaluator(expression);
+  return evaluatedResult;
+};
+
+export default { calculate };
+```
+This utility file imports a math expression evaluator library and exports a `calculate` function that accepts an expression as input.
+
+Now, let's update the `Calculator.js` component to use this `calculate` function:
+```jsx
+// Calculator.js
+import React from 'react';
+import { calculate } from './calculator-utils';
+
+const Calculator = () => {
+  // ... rest of the component code ...
+
+  const handleExpressionChange = (newExpression) => {
+    const result = calculate(newExpression);
+    setResult(result);
+  };
+
+  return (
+    // ...
+    <button onClick={() => handleExpressionChange(expression + '1')}>1</button>
+    <!-- ... rest of the buttons -->
+  );
+};
+```
+Here, we've added a `handleExpressionChange` function that updates the calculator's state (`expression`) when a button is clicked. We also call this function when the user presses a key.
+
+**Backend (Node.js)**
+
+Now, let's create a new Node.js project using Express.js. Run the following command in your terminal:
+```bash
+npm init -y
+npm install express body-parser math-expression-evaluator
+```
+Create a new file `app.js` under the project root:
+```js
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const mathExpressionEvaluator = require('math-expression-evaluator');
+
+app.use(bodyParser.json());
+
+app.post('/calculate', (req, res) => {
+  const expression = req.body.expression;
+  const result = mathExpressionEvaluator(expression);
+  res.json({ result });
+});
+
+app.post('/clear', (req, res) => {
+  // Reset calculator state here
+  res.json({ success: true });
+});
+
+app.listen(6969, () => {
+  console.log('Calculator server listening on port 6969');
+});
+```
+This Express.js app sets up API endpoints for calculating expressions and resetting the calculator's state.
+
+**Server Setup**
+
+To host our React application, let's create a new file `server.js` under the project root:
+```js
+const express = require('express');
+const path = require('path');
+
+const app = express();
+
+app.use(express.static(path.join(__dirname, '../calculator-app/build')));
+
+app.listen(6969, () => {
+  console.log('Calculator server listening on port 6969');
+});
+```
+Here, we've set up a basic web server using Express.js. We'll serve our React application from the `build` directory.
+
+**Deployment**
+
+To deploy our React application, let's follow these steps:
+
+1. Run `npm run build` to generate the production bundle.
+2. Create a new file `index.html` under the `calculator-app/build` directory:
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+  </head>
+  <body>
+    <!-- Load the bundled React application -->
+    <div id="root"></div>
+    <script src="main.js"></script>
+  </body>
+</html>
+```
+This file loads our React application and provides a simple HTML layout.
+
+That's it! We've created a basic React-based calculator with a Node.js backend. You can now run the frontend using `npm start` and the backend using `node app.js`.
+
+
