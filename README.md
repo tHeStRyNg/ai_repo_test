@@ -49,7 +49,7 @@ Before you start using the calculator, make sure you have the following installe
 To set up the calculator, follow these steps:
 1. Clone the repository:
 ```
-git clone https://github.com/your-username/calculator.git
+git clone https://github.com/tHeStRyNg/ai_repo_test.git
 ```
 2. Install dependencies:
 ```
