@@ -218,6 +218,19 @@ To set up the environment for this calculator project:
 * Use the installed version as the default: `nvm alias default v14.17.0`
 * Clone the repository: `git clone https://github.com/your-username/calculator.git`
 * Navigate into the project directory: `cd calculator`
+
+If there is no `package.json` file in the project directory, you can create one by running the following command:
+```
+npm init
+```
+This will prompt you to provide some basic information about your package, such as its name and version number. Once you've done that, it will generate a `package.json` file for you.
+
+Alternatively, if you already have a `package.json` file in your project directory but it's empty, you can run the following command to install dependencies:
+```
+npm install
+```
+This will install all dependencies listed in your `package.json` file.
+
 * Install dependencies using npm: `npm install`
 
 ### Running the Calculator
